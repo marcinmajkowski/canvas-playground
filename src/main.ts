@@ -1,45 +1,28 @@
-import { sayHello } from './greet';
-
-function showHello(divName: string, name: string) {
-  const elt = document.getElementById(divName);
-  elt.innerText = sayHello(name);
-}
-
-// showHello('greeting', 'TypeScript');
-
-var PIXEL_RATIO = (function () {
-  var ctx: any = document.createElement("canvas").getContext("2d"),
-    dpr = window.devicePixelRatio || 1,
-    bsr = ctx.webkitBackingStorePixelRatio ||
-      ctx.mozBackingStorePixelRatio ||
-      ctx.msBackingStorePixelRatio ||
-      ctx.oBackingStorePixelRatio ||
-      ctx.backingStorePixelRatio || 1;
-
+const PIXEL_RATIO = (() => {
+  const ctx: any = document.createElement('canvas').getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const bsr = ctx.webkitBackingStorePixelRatio ||
+    ctx.mozBackingStorePixelRatio ||
+    ctx.msBackingStorePixelRatio ||
+    ctx.oBackingStorePixelRatio ||
+    ctx.backingStorePixelRatio || 1;
   return dpr / bsr;
 })();
 
-
-const resizeHiDPICanvas = function (can: HTMLCanvasElement, w: any, h: any) {
-  can.width = w * PIXEL_RATIO;
-  can.height = h * PIXEL_RATIO;
-  can.style.width = w + "px";
-  can.style.height = h + "px";
-  can.getContext("2d").setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
+const resizeCanvas = (canvasElement: HTMLCanvasElement, width: number, height: number) => {
+  canvasElement.width = width * PIXEL_RATIO;
+  canvasElement.height = height * PIXEL_RATIO;
+  canvasElement.style.width = width + 'px';
+  canvasElement.style.height = height + 'px';
+  canvasElement.getContext('2d').setTransform(PIXEL_RATIO, 0, 0, PIXEL_RATIO, 0, 0);
 }
 
 const c = document.createElement('canvas');
-resizeHiDPICanvas(c, window.innerWidth, window.innerHeight)
 document.body.appendChild(c);
+resizeCanvas(c, window.innerWidth, window.innerHeight);
 
-window.addEventListener('resize', () => resizeHiDPICanvas(c, window.innerWidth, window.innerHeight), true);
-window.addEventListener('orientationchange', () => {
-  // on orientationchange innerWidth and innerHeight are stale
-  setTimeout(() => {
-    resizeHiDPICanvas(c, window.innerWidth, window.innerHeight);
-    window.scrollTo(0, 1);
-  }, 500);
-});
+window.addEventListener('resize', () => resizeCanvas(c, window.innerWidth, window.innerHeight), true);
+window.addEventListener('orientationchange', () => setTimeout(() => resizeCanvas(c, window.innerWidth, window.innerHeight), 500));
 
 const ctx = c.getContext('2d');
 
@@ -47,7 +30,7 @@ let x = 100;
 let lastCalledTime: number;
 let frameCount: number;
 let fps = '- fps';
-function animate() {
+const animate = () => {
   requestAnimationFrame(animate);
 
   ctx.fillStyle = '#ffff00';
