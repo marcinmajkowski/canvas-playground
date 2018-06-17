@@ -1,4 +1,5 @@
 import { resizeCanvas } from './resize-canvas';
+import { Fps } from './fps';
 
 const c = document.createElement('canvas');
 document.body.appendChild(c);
@@ -10,9 +11,7 @@ window.addEventListener('orientationchange', () => setTimeout(() => resizeCanvas
 const ctx = c.getContext('2d');
 
 let x = 100;
-let lastCalledTime: number;
-let frameCount: number;
-let fps = '- fps';
+const fps = new Fps(ctx);
 const animate = () => {
   requestAnimationFrame(animate);
 
@@ -26,21 +25,12 @@ const animate = () => {
   ctx.stroke();
   x++;
 
-  if (lastCalledTime === undefined) {
-    lastCalledTime = performance.now();
-    frameCount = 0;
-  } else if (performance.now() - lastCalledTime < 1000) {
-    frameCount++;
-  } else {
-    lastCalledTime = performance.now();
-    fps = `${Math.round(frameCount)} fps`;
-    frameCount = 0;
-  }
-
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = 'blue';
   ctx.font = "30px Arial";
-  ctx.fillText(fps, 100, 100);
   ctx.fillText(`${c.width} x ${c.height}`, 100, 200);
+
+  fps.update();
+  fps.draw();
 }
 
 animate();
