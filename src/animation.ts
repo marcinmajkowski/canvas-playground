@@ -14,7 +14,7 @@ export class Animation {
 
     const ctx = this.ctx;
 
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
     this.ctx.beginPath();
     this.ctx.arc(this.x, 200, 30, 0, Math.PI * 2, false);
@@ -23,9 +23,10 @@ export class Animation {
     this.x++;
 
     this.ctx.fillStyle = 'blue';
-    this.ctx.font = "30px Arial";
+    this.ctx.font = '30px Arial';
     this.ctx.textAlign = 'left';
     this.ctx.fillText(`${this.canvas.width} x ${this.canvas.height}`, 100, 200);
+    this.ctx.fillText(`${window.innerWidth} x ${window.innerHeight}`, 100, 300);
 
     ctx.fillStyle = 'rgb(200, 0, 0)';
     ctx.fillRect(10, 10, 50, 50);
@@ -33,7 +34,7 @@ export class Animation {
     ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
     ctx.fillRect(30, 30, 50, 50);
 
-    this.fps.x = this.canvas.width / 2;
+    this.fps.x = window.innerWidth / 2;
     this.fps.update();
     this.fps.draw();
   }
