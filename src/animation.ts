@@ -12,10 +12,10 @@ export class Animation {
   animate(): void {
     requestAnimationFrame(() => this.animate());
 
-    this.ctx.fillStyle = '#ffff00';
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.strokeStyle = 'red';
-    this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
+    const ctx = this.ctx;
+
+    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     this.ctx.beginPath();
     this.ctx.arc(this.x, 200, 30, 0, Math.PI * 2, false);
     this.ctx.strokeStyle = 'blue';
@@ -24,8 +24,16 @@ export class Animation {
 
     this.ctx.fillStyle = 'blue';
     this.ctx.font = "30px Arial";
+    this.ctx.textAlign = 'left';
     this.ctx.fillText(`${this.canvas.width} x ${this.canvas.height}`, 100, 200);
 
+    ctx.fillStyle = 'rgb(200, 0, 0)';
+    ctx.fillRect(10, 10, 50, 50);
+
+    ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
+    ctx.fillRect(30, 30, 50, 50);
+
+    this.fps.x = this.canvas.width / 2;
     this.fps.update();
     this.fps.draw();
   }

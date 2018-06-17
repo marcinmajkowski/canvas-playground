@@ -6,6 +6,7 @@ export class Fps {
 
   fillStyle = 'black';
   font = '15px Arial';
+  textAlign = 'center';
   x = 5;
   y = 15;
 
@@ -15,6 +16,7 @@ export class Fps {
   draw(): void {
     this.ctx.fillStyle = this.fillStyle;
     this.ctx.font = this.font;
+    this.ctx.textAlign = this.textAlign;
     this.ctx.fillText(`FPS: ${this.fps !== undefined ? this.fps : '-'}`, this.x, this.y);
   }
 
