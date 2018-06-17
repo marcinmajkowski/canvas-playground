@@ -5,8 +5,22 @@ export class Animation {
   private readonly ctx = this.canvas.getContext('2d');
   private readonly fps = new Fps(this.ctx);
   private x = 100;
+  private clickX: number;
+  private clickY: number;
 
   constructor(private canvas: HTMLCanvasElement) {
+    canvas.addEventListener('ontouchstart' in document.documentElement ? 'touchstart' : 'click', (event: MouseEvent & TouchEvent) => {
+      event.preventDefault();
+      if ('ontouchstart' in document.documentElement) {
+        if (event.touches && event.touches.length > 0) {
+          this.clickX = event.touches[0].pageX;
+          this.clickY = event.touches[0].pageY;
+        }
+      } else {
+        this.clickX = event.clientX;
+        this.clickY = event.clientY;
+      }
+    });
   }
 
   animate(): void {
@@ -22,6 +36,13 @@ export class Animation {
     this.ctx.stroke();
     this.x++;
 
+    if (this.clickX !== undefined && this.clickY !== undefined) {
+      ctx.beginPath();
+      ctx.arc(this.clickX, this.clickY, 20, 0, Math.PI * 2);
+      ctx.strokeStyle = 'red';
+      ctx.stroke();
+    }
+
     this.ctx.fillStyle = 'blue';
     this.ctx.font = '30px Arial';
     this.ctx.textAlign = 'start';
@@ -32,6 +53,20 @@ export class Animation {
     this.drawSmile();
     ctx.strokeStyle = 'green';
     this.drawSpeechBalloon();
+
+    var rectangle = new Path2D();
+    rectangle.rect(10, 10, 50, 50);
+
+    var circle = new Path2D();
+    circle.moveTo(125, 35);
+    circle.arc(100, 35, 25, 0, 2 * Math.PI);
+
+    ctx.stroke(rectangle);
+    ctx.fill(circle);
+
+    var p = new Path2D('M10 10 h 80 v 80 h -80 Z');
+    ctx.strokeStyle = 'black';
+    ctx.stroke(p);
 
     this.fps.x = window.innerWidth / 2;
     this.fps.update();
