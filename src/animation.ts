@@ -30,29 +30,25 @@ export class Animation {
 
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-    this.ctx.beginPath();
-    this.ctx.arc(this.x, 200, 30, 0, Math.PI * 2, false);
-    this.ctx.strokeStyle = 'blue';
-    this.ctx.stroke();
-    this.x++;
+    this.drawCircle(this.x++, 200);
 
     if (this.clickX !== undefined && this.clickY !== undefined) {
-      ctx.beginPath();
-      ctx.arc(this.clickX, this.clickY, 20, 0, Math.PI * 2);
+      ctx.save();
       ctx.strokeStyle = 'red';
-      ctx.stroke();
+      this.drawCircle(this.clickX, this.clickY);
+      ctx.restore();
     }
 
-    this.ctx.fillStyle = 'blue';
-    this.ctx.font = '30px Arial';
-    this.ctx.textAlign = 'start';
-    this.ctx.fillText(`${this.canvas.width} x ${this.canvas.height}`, 100, 200);
-    this.ctx.fillText(`${window.innerWidth} x ${window.innerHeight}`, 100, 300);
-
-    ctx.strokeStyle = 'black';
+    ctx.save();
+    ctx.translate(0, 70);
+    ctx.strokeStyle = 'blue';
     this.drawSmile();
-    ctx.strokeStyle = 'green';
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(100, 0);
     this.drawSpeechBalloon();
+    ctx.restore();
 
     var rectangle = new Path2D();
     rectangle.rect(10, 10, 50, 50);
@@ -73,6 +69,12 @@ export class Animation {
     this.fps.draw();
   }
 
+  private drawCircle(x: number, y: number): void {
+    this.ctx.beginPath();
+    this.ctx.arc(x, y, 30, 0, Math.PI * 2, false);
+    this.ctx.stroke();
+  }
+
   private drawSmile(): void {
     const ctx = this.ctx;
     ctx.beginPath();
@@ -83,7 +85,6 @@ export class Animation {
     ctx.arc(60, 65, 5, 0, Math.PI * 2, true);  // Left eye
     ctx.moveTo(95, 65);
     ctx.arc(90, 65, 5, 0, Math.PI * 2, true);  // Right eye
-    ctx.strokeStyle = 'red';
     ctx.stroke();
   }
 
