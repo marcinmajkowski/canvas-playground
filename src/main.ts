@@ -8,29 +8,36 @@ resizeCanvas(c, window.innerWidth, window.innerHeight);
 window.addEventListener('resize', () => resizeCanvas(c, window.innerWidth, window.innerHeight), true);
 window.addEventListener('orientationchange', () => setTimeout(() => resizeCanvas(c, window.innerWidth, window.innerHeight), 500));
 
-const ctx = c.getContext('2d');
+class Animation {
 
-let x = 100;
-const fps = new Fps(ctx);
-const animate = () => {
-  requestAnimationFrame(animate);
+  private readonly ctx = this.canvas.getContext('2d');
+  private readonly fps = new Fps(this.ctx);
+  private x = 100;
 
-  ctx.fillStyle = '#ffff00';
-  ctx.fillRect(0, 0, c.width, c.height);
-  ctx.strokeStyle = 'red';
-  ctx.strokeRect(0, 0, c.width, c.height);
-  ctx.beginPath();
-  ctx.arc(x, 200, 30, 0, Math.PI * 2, false);
-  ctx.strokeStyle = 'blue';
-  ctx.stroke();
-  x++;
+  constructor(private canvas: HTMLCanvasElement) {
+    requestAnimationFrame(() => this.animate());
+  }
 
-  ctx.fillStyle = 'blue';
-  ctx.font = "30px Arial";
-  ctx.fillText(`${c.width} x ${c.height}`, 100, 200);
+  private animate(): void {
+    requestAnimationFrame(() => this.animate());
 
-  fps.update();
-  fps.draw();
+    this.ctx.fillStyle = '#ffff00';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.strokeStyle = 'red';
+    this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, 200, 30, 0, Math.PI * 2, false);
+    this.ctx.strokeStyle = 'blue';
+    this.ctx.stroke();
+    this.x++;
+  
+    this.ctx.fillStyle = 'blue';
+    this.ctx.font = "30px Arial";
+    this.ctx.fillText(`${this.canvas.width} x ${this.canvas.height}`, 100, 200);
+  
+    this.fps.update();
+    this.fps.draw();
+  }
 }
 
-animate();
+const animation = new Animation(c);
